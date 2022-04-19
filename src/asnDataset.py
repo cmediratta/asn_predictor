@@ -80,7 +80,7 @@ def create_dataset(params, n):
 
   train_num = int(0.8 * len(data)) 
   val_num = int(0.1 * len(data))
-  test_num = len(data) - train_count - valid_count
+  test_num = len(data) - train_num - val_num
   train, val, test = random_split(data, (train_num, val_num, test_num))
   train_loader = DataLoader(train, batch_size=4, shuffle=True)
   val_loader = DataLoader(val, batch_size=1, shuffle=True)
