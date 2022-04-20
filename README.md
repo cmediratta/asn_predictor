@@ -4,6 +4,11 @@ Project by Cole Mediratta (cole@mediratta.net)
            William Hawkins (hawkiw2@rpi.edu)
 
 
+Usage: 
+
+python3 main.py filename
+
+
 Goal:
 
 To create a classifer to classify animal behavior graphs into

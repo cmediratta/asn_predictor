@@ -40,7 +40,7 @@ params - an array of length 5 containing the indices of each feature we wish for
          Index calculations assume title and y value are there.
 n - the total number of possible features
 """
-def create_dataset(params, n):
+def create_dataset(params, n, filename):
 
   if(len(params)!=5):
     raise RuntimeError('Improper size of params.')
@@ -59,7 +59,7 @@ def create_dataset(params, n):
   x_all = []
   y_all = []
 
-  with open("data/asnDataset.csv") as file:
+  with open("data/" + filename) as file:
 
     csvreader = csv.reader(file)
 
@@ -79,14 +79,12 @@ def create_dataset(params, n):
   data = asnDataset(np.array(x_all), np.array(y_all))
 
   train_num = int(0.8 * len(data)) 
-  val_num = int(0.1 * len(data))
-  test_num = len(data) - train_num - val_num
-  train, val, test = random_split(data, (train_num, val_num, test_num))
+  test_num = len(data) - train_num
+  train, test = random_split(data, (train_num, test_num))
   train_loader = DataLoader(train, batch_size=4, shuffle=True)
-  val_loader = DataLoader(val, batch_size=1, shuffle=True)
   test_loader = DataLoader(test, batch_size=1, shuffle=False)
 
-  return train_loader, val_loader, test_loader
+  return train_loader, test_loader
 
 
 
