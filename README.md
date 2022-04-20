@@ -7,6 +7,9 @@ Project by Cole Mediratta (cole@mediratta.net)
 Usage: 
 
 python3 main.py filename
+OR
+python3 main.py filename perturb
+IF CREATING PERTURBED DATASET DESIRED
 
 
 Goal:
