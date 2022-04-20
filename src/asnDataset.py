@@ -37,9 +37,14 @@ This creates our actual dataset for easy interface with the main
 function.
 
 Inputs:
-params - an array of length 5 containing the indices of each feature we wish for this time.
-         Index calculations assume title and y value are there.
-n - the total number of possible features
+filename - the name of the file we are pulling data from
+train_size - a value of either n or 0 of which if n we take exactly
+             n as our training set (otherwise 80%)
+randomize - true if we randomize our train test data, false if not
+
+Outputs:
+train_loader - a dataloader filled with training data
+test_loader - a dataloader filled with testing data
 """
 def create_dataset(filename, train_size, randomize=True):
 
@@ -52,6 +57,20 @@ def create_dataset(filename, train_size, randomize=True):
 
 
 
+"""
+This is a helper function to input a filename and get the subset of
+test and train data.
+
+Inputs:
+filename - the name of the file we are pulling data from
+train_size - a value of either n or 0 of which if n we take exactly
+             n as our training set (otherwise 80%)
+randomize - true if we randomize our train test data, false if not
+
+Outputs:
+train - a torch subset containing training data
+test - a torch subset containing testing data
+"""
 def get_train_test(filename, train_size, randomize):
 
   params = [1,2,3,4,5]

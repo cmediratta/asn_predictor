@@ -15,7 +15,7 @@ def main(filename, train_size=0):
   if(filename[(len(filename)-13):]!="Perturbed.csv"):
     train_loader, test_loader = create_dataset(filename, train_size)
   else:
-    train_loader, test_loader = create_dataset(filename, train_size, randomize  =False)
+    train_loader, test_loader = create_dataset(filename, train_size, randomize=False)
 
   print("Data Loaded!\n")
 

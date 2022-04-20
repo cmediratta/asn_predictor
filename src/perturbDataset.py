@@ -1,6 +1,19 @@
 from src.asnDataset import get_train_test
 import random
 
+"""
+This function is built to create a perturbed dataset to create more robustness
+in our model. It takes existing datapoints and perturbs them slightly so that
+the model counts loss evenly among catagories.
+
+Inputs:
+filename - the file to perturb
+
+Outputs:
+A file in the /data folder under the name (filename-.csv)Perturb.csv which
+    is the perturbed dataset in addition to the initial train then the test data.
+train_size - the size of the training data in the new (filename-.csv)Perturb.csv
+"""
 def perturb_data(filename):
 
   train, test = get_train_test(filename, 0, True)
@@ -33,7 +46,16 @@ def perturb_data(filename):
   return train_size
 
 
+"""
+Helper function to write data point to csv file.
 
+Inputs:
+torch_array - format np.array([float,float,float,float,float],float)
+file - file to write to
+
+Output:
+torch_array gets written in csv format to file
+"""
 def write_to_file(torch_array, file):
   writestring = "perturbed," + str(torch_array[0][0]) + "," + str(torch_array[0][1]) + "," + str(torch_array[0][2]) + ","\
                 + str(torch_array[0][3]) + "," + str(torch_array[0][4]) + "," + str(int(torch_array[1])) + "\n"
