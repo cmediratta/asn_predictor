@@ -2,16 +2,20 @@ import torch
 from src.model import multiClassModel
 from src.asnDataset import create_dataset
 from src.trainTools import next_epoch, test_results
+from src.perturbDataset import perturb_data
 import numpy as np
 import sys
 
-def main(filename):
+def main(filename, train_size=0):
 
   NUM_EPOCHS = 100
   LEARNING_RATE = 0.01
   TYPE = ["PRESOCIAL", "SUBSOCIAL", "SOLITARY BUT SOCIAL", "PARASOCIAL", "EUSOCIAL"]
   
-  train_loader, test_loader = create_dataset([1,2,3,4,5],7,filename)
+  if(filename[(len(filename)-13):]!="Perturbed.csv"):
+    train_loader, test_loader = create_dataset(filename, train_size)
+  else:
+    train_loader, test_loader = create_dataset(filename, train_size, randomize  =False)
 
   print("Data Loaded!\n")
 
@@ -42,5 +46,10 @@ def main(filename):
 
 if __name__ == '__main__':
   filename = sys.argv[1]
-  main(filename)
+  if(len(sys.argv)>2 and sys.argv[2]=="perturb"):
+    t_size = perturb_data(filename)
+    filename = filename[:(len(filename)-4)]+"Perturbed.csv"
+    main(filename, train_size=t_size)
+  else:
+    main(filename)
 

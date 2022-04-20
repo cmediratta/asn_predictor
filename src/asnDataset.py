@@ -2,6 +2,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 import csv
 import numpy as np
 import random
+import torch
 
 """
 This class takes in our np matrix data in x and y creates a Dataset
@@ -40,21 +41,21 @@ params - an array of length 5 containing the indices of each feature we wish for
          Index calculations assume title and y value are there.
 n - the total number of possible features
 """
-def create_dataset(params, n, filename):
+def create_dataset(filename, train_size, randomize=True):
 
-  if(len(params)!=5):
-    raise RuntimeError('Improper size of params.')
+  train, test = get_train_test(filename, train_size, randomize)
 
-  params=sorted(params)
+  train_loader = DataLoader(train, batch_size=4, shuffle=True)
+  test_loader = DataLoader(test, batch_size=1, shuffle=False)
 
-  if(params[4]>n-2):
-    raise RuntimeError('Item in params too large.')
+  return train_loader, test_loader
 
-  if(params[0]<1):
-    raise RuntimeError('Item in params too small.')
 
-  if(len(params) != len(set(params))):
-    raise RuntimeError('Duplicate params.')
+
+def get_train_test(filename, train_size, randomize):
+
+  params = [1,2,3,4,5]
+  n = 7
 
   x_all = []
   y_all = []
@@ -78,13 +79,16 @@ def create_dataset(params, n, filename):
 
   data = asnDataset(np.array(x_all), np.array(y_all))
 
-  train_num = int(0.8 * len(data)) 
+  train_num = max(int(0.8 * len(data)),train_size)
   test_num = len(data) - train_num
-  train, test = random_split(data, (train_num, test_num))
-  train_loader = DataLoader(train, batch_size=4, shuffle=True)
-  test_loader = DataLoader(test, batch_size=1, shuffle=False)
+  if(randomize):
+    train, test = random_split(data, (train_num, test_num))
+  else:
+    train = torch.utils.data.Subset(data, range(train_num))
+    test = torch.utils.data.Subset(data, range(train_num, train_num+test_num))
 
-  return train_loader, test_loader
+  return train, test
+
 
 
 
