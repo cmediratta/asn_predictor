@@ -3,6 +3,7 @@ from src.model import multiClassModel
 from src.asnDataset import create_dataset
 from src.trainTools import next_epoch, test_results
 from src.perturbDataset import perturb_data
+from src.analysis import graph_PCA, confusion_matrix
 import numpy as np
 import sys
 
@@ -29,19 +30,22 @@ def main(filename, train_size=0):
   loss_array = []
   for i in range(NUM_EPOCHS):
 
-      mdl.train()
-      next_epoch(train_loader, mdl, loss_fn, optimizer)
-      mdl.eval()
+    mdl.train()
+    next_epoch(train_loader, mdl, loss_fn, optimizer)
+    mdl.eval()
 
-      results = test_results(test_loader, mdl, loss_fn)
-      if((i+1)%5==0):
-        print("Epoch %i:\n  Loss: %f\n  Accuracy: %2.2f%%"%(i+1, results[0], round(results[1]*100,2)))
-        print("Accuracy By Catagory:")
-        for j in range(5):
-          print("  %s: %2.2f%%"%(TYPE[j],results[2][j]*100))
-        print("\n")
-      loss_array.append(results[0])
-      acc_array.append(results[1])
+    results = test_results(test_loader, mdl, loss_fn)
+    if((i+1)%5==0):
+      print("Epoch %i:\n  Loss: %f\n  Accuracy: %2.2f%%"%(i+1, results[0], round(results[1]*100,2)))
+      print("Accuracy By Catagory:")
+      for j in range(5):
+        print("  %s: %2.2f%%"%(TYPE[j],results[2][j]*100))
+      print("\n")
+    loss_array.append(results[0])
+    acc_array.append(results[1])
+
+  graph_PCA(train_loader,mdl)
+  confusion_matrix(test_loader,mdl)
 
 
 if __name__ == '__main__':
